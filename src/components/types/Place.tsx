@@ -15,8 +15,8 @@ export interface Place {
   };
   dietary_restrictions?: DietaryRestriction[];
   address: string;
-  latitude?: number; // 添加纬度属性
-  longitude?: number; // 添加经度属性
+  latitude?: number; 
+  longitude?: number; 
   location_id?: string;
   website?: string;
   web_url?: string;
