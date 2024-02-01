@@ -23,9 +23,9 @@ import { useState } from "react";
 
 interface Props {
   isLoaded: boolean;
-  setType: any;
-  setRatings: any;
-  setCoordinates: any;
+  setType: (type: string) => void;
+  setRatings: (rating: number) => void;
+  setCoordinates: (coords: { lat: number; lng: number }) => void;
 }
 const Header = ({ isLoaded, setType, setRatings, setCoordinates }: Props) => {
   const [autocomplete, setAutocomplete] =
