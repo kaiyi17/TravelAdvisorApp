@@ -2,12 +2,19 @@ import { Fragment, useState, useRef, useCallback } from "react";
 import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
 import { Place } from "./types/Place";
 import { Box, Text, Image } from "@chakra-ui/react";
+import _ from "lodash";
+import { Bounds } from "./types/Bounds";
+
+interface Coordinates {
+  lat: number;
+  lng: number;
+}
 
 interface Props {
-  coordinates: { lat: number; lng: number };
+  coordinates: Coordinates;
   setCoordinates: (coords: { lat: number; lng: number }) => void;
-  bounds: any;
-  setBounds: any;
+  bounds: Bounds | null;
+  setBounds: (bounds: Bounds) => void;
   places: Place[];
   isLoaded: boolean;
   loadError: Error | null;
@@ -22,10 +29,6 @@ const MapComponent = ({
   isLoaded,
   loadError,
 }: Props) => {
-  // const { isLoaded, loadError } = useLoadScript({
-  //   googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
-  //   libraries: ["places"],
-  // });
   const [activeMarker, setActiveMarker] = useState<number | null>(null);
   const mapRef = useRef<google.maps.Map>();
 
