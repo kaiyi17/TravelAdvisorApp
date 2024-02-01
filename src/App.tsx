@@ -14,6 +14,7 @@ function App() {
     libraries: ["places"],
   });
 
+  const [isLocationLoaded, setIsLocationLoaded] = useState(false);
   const [places, setPLaces] = useState<Place[]>([]);
   const [filteredPlaces, setFilteredPlaces] = useState<Place[]>([]);
   const [coordinates, setCoordinates] = useState({
@@ -29,11 +30,12 @@ function App() {
     //get the users curent location on initial login/ website is loaded
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
-        console.log(coords.latitude, coords.longitude);
         setCoordinates({ lat: coords.latitude, lng: coords.longitude });
+        setIsLocationLoaded(true);
       },
       (error) => {
         console.error("Geolocation error:", error);
+        setIsLocationLoaded(true);
       }
     );
   }, []);
@@ -50,6 +52,10 @@ function App() {
         .then((data) => {
           console.log(data);
           setPLaces(data);
+          const filteredData = data.filter(
+            (place: Place) => place.rating > ratings
+          );
+          setFilteredPlaces(filteredData);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -57,7 +63,7 @@ function App() {
           setIsLoading(false);
         });
     }
-  }, [type, bounds, coordinates]);
+  }, [type, bounds, coordinates, ratings]);
 
   const safeLoadError = loadError ?? null;
 
@@ -86,7 +92,7 @@ function App() {
             isLoading={isLoading}
           />
 
-          {isLoaded && coordinates && (
+          {isLoaded && isLocationLoaded ? (
             <MapComponent
               setCoordinates={setCoordinates}
               coordinates={coordinates}
@@ -96,6 +102,8 @@ function App() {
               isLoaded={isLoaded}
               loadError={safeLoadError}
             />
+          ) : (
+            <div>Loading map...</div>
           )}
         </Flex>
       </ChakraProvider>
